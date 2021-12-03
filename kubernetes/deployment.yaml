@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kubernetes-secrets
+  labels:
+    app: kubernetes-secrets
+  namespace: mynamespace
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kubernetes-secrets
+  template:
+    metadata:
+      labels:
+        app: kubernetes-secrets
+    spec:
+      containers:
+      - name: kubernetes-secrets
+        image: kubernetes-secret:v0.0.1
+        command: ["/app/kubernetes-secrets"]
+        args: ["--namespace=mynamespace", "--secret=mysecret"]
