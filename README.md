@@ -48,3 +48,14 @@ Get the logs from the pod
 ```bash
 kubectl logs kubernetes-secrets-xxxxx  -n mynamespace
 ```
+
+## Clean up after
+
+To clean up after run:
+
+```bash
+kubectl delete secret mysecret -n mynamespace
+kubectl delete deployment kubernetes-secrets -n mynamespace
+kubectl delete role secret-reader -n mynamespace
+kubectl delete rolebinding read-secrets -n mynamespace
+```
