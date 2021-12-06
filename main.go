@@ -37,8 +37,8 @@ func main() {
 		panic(err)
 	}
 	log.Println("kubernetes secret Data field")
-	for key, value := range secret.Data {
-		log.Printf("%s = %s\n", key, value)
+	for key := range secret.Data {
+		log.Printf("%s = %s\n", key, "****")
 	}
 
 	sigs := make(chan os.Signal, 1)
