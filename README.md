@@ -16,7 +16,7 @@ docker build -t kubernetes-secret .
 docker tag kubernetes-secret:latest kubernetes-secret:v0.0.1
 ```
 
-## Deploy to Docker kubernetes. 
+## Deploy to Docker kubernetes
 
 Get the Docker desktop context.
 
@@ -39,7 +39,7 @@ kubectl get deployments -n mynamespace
 
 Check on the pods
 
-```bash 
+```bash
 kubectl get pods -n mynamespace
 ```
 
