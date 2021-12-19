@@ -15,6 +15,8 @@ spec:
       labels:
         app: kubernetes-secrets
     spec:
+      serviceAccount: my-service-account
+      serviceAccountName: my-service-account
       containers:
       - name: kubernetes-secrets
         image: kubernetes-secret:v0.0.1

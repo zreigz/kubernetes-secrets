@@ -58,4 +58,5 @@ kubectl delete secret mysecret -n mynamespace
 kubectl delete deployment kubernetes-secrets -n mynamespace
 kubectl delete role secret-reader -n mynamespace
 kubectl delete rolebinding read-secrets -n mynamespace
+kubectl delete serviceaccount my-service-account -n mynamespace
 ```
