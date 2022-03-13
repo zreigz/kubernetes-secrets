@@ -17,8 +17,20 @@ spec:
     spec:
       serviceAccount: my-service-account
       serviceAccountName: my-service-account
+      securityContext:
+        runAsUser: 100
+        runAsGroup: 65533
+        fsGroup: 65533
       containers:
       - name: kubernetes-secrets
         image: kubernetes-secret:v0.0.1
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+              - ALL
+          privileged: false
+          readOnlyRootFilesystem: true
+          runAsNonRoot: true
         command: ["/app/kubernetes-secrets"]
         args: ["--namespace=mynamespace", "--secret=mysecret"]
