@@ -1,25 +1,23 @@
-FROM golang:1.17.3 AS builder
+FROM golang:1.21.1 AS builder
 
-RUN mkdir -p /go/src/github.com/bvwells/kubernetes-secrets 
-COPY main.go /go/src/github.com/bvwells/kubernetes-secrets
-COPY go.mod /go/src/github.com/bvwells/kubernetes-secrets
-COPY go.sum /go/src/github.com/bvwells/kubernetes-secrets
-COPY vendor /go/src/github.com/bvwells/kubernetes-secrets/vendor
-WORKDIR /go/src/github.com/bvwells/kubernetes-secrets
+WORKDIR /workspace
 
-RUN go build -v -mod=vendor
+# Copy the Go Modules manifests
+COPY go.mod go.mod
+COPY go.sum go.sum
+# cache deps before building and copying source so that we don't need to re-download as much
+# and so that source changes don't invalidate our downloaded layer
+RUN go mod download
 
-FROM alpine:3.14.3
+# Copy the go source
+COPY main.go main.go
 
-RUN mkdir /lib64 && \
-    ln -s /lib/libc.musl-x86_64.so.1 /lib64/ld-linux-x86-64.so.2
+# Build
+RUN CGO_ENABLED=0 GOOS=linux GOARCH=${TARGETARCH} GO111MODULE=on go build -a -o kubernetes-secrets main.go
 
-RUN mkdir /app
-WORKDIR /app/
-COPY --from=builder /go/src/github.com/bvwells/kubernetes-secrets/kubernetes-secrets /app/
+FROM gcr.io/distroless/static:nonroot
+WORKDIR /
 
-RUN addgroup -S kube && adduser -S -g kube kube
-RUN chown kube:kube /app
-USER kube
-
-CMD ["/app/kubernetes-secrets"]
+COPY --from=builder /workspace/kubernetes-secrets .
+USER 65532:65532
+ENTRYPOINT ["/kubernetes-secrets"]
