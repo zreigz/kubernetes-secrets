@@ -1,5 +1,5 @@
 apiVersion: rbac.authorization.k8s.io/v1
-kind: Role
+kind: ClusterRole
 metadata:
   namespace: mynamespace
   name: secret-reader
@@ -9,7 +9,7 @@ rules:
   verbs: ["get", "list"]
 ---
 apiVersion: rbac.authorization.k8s.io/v1
-kind: RoleBinding
+kind: ClusterRoleBinding
 metadata:
   name: read-secrets
   namespace: mynamespace
@@ -18,6 +18,6 @@ subjects:
   name: my-service-account
   apiGroup: rbac.authorization.k8s.io
 roleRef:
-  kind: Role
+  kind: ClusterRole
   name: secret-reader
   apiGroup: rbac.authorization.k8s.io
