@@ -1,23 +1,29 @@
-apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRole
-metadata:
-  namespace: mynamespace
-  name: secret-reader
-rules:
-- apiGroups: [""] # "" indicates the core API group
-  resources: ["secrets"]
-  verbs: ["get", "list"]
 ---
+kind: ClusterRole
 apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRoleBinding
 metadata:
-  name: read-secrets
+  name: secret-controller-role
   namespace: mynamespace
+  labels:
+    app: kubernetes-secrets
+rules:
+  - apiGroups: [""]
+    resources: ["secrets"]
+    verbs: ["list", "watch", "create", "update", "patch", "get", "patch", "delete"]
+
+---
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: secret-controller-binding
+  namespace: mynamespace
+  labels:
+    app: kubernetes-secrets
 subjects:
-- kind: ServiceAccount
-  name: my-service-account
-  apiGroup: rbac.authorization.k8s.io
+  - kind: ServiceAccount
+    name: my-service-account
+    namespace: mynamespace
 roleRef:
   kind: ClusterRole
-  name: secret-reader
+  name: secret-controller-role
   apiGroup: rbac.authorization.k8s.io
