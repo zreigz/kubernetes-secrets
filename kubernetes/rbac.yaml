@@ -3,7 +3,6 @@ kind: ClusterRole
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
   name: secret-controller-role
-  namespace: mynamespace
   labels:
     app: kubernetes-secrets
 rules:
@@ -16,7 +15,6 @@ kind: ClusterRoleBinding
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
   name: secret-controller-binding
-  namespace: mynamespace
   labels:
     app: kubernetes-secrets
 subjects:
